@@ -3,9 +3,11 @@
         "target": "ES6",
         "module": "commonjs",
         "outDir": "./dist",
-        "rootDir": "./src",
+        "sourceRoot": "./src",
         "strict": true,
         "esModuleInterop": true,
         "moduleResolution": "node",
-    }
+        "sourceMap": true
+    },
+    "lib": ["es2024"]  
 }
