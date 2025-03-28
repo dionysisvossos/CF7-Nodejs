@@ -7,13 +7,25 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use('/', express.static('files'));
 
+const logger = (req, res, next) => {
+    let url = req.url;
+    console.log(logger, req.body);
+    let time = new Date();
+    console.log(`Request received at ${time} for ${url}`);
+    
+    next();
+}
+
+
 app.get('/', (req, res) => {
     console.log('Request received!');
     res.send('This is the Home page');
     });
 
-app.post('/user', (req, res) => {
+app.post('/user', logger, (req, res) => {
     let data = req.body;
+    let username = data.username;
+    let email = data.email;
     console.log('Data: ', data);
     res.send('Data received');
     
