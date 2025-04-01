@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt');
 const User = require('../models/user.model');
+const AuthService = require('../services/auth.service');
 
 exports.login = async(req, res) =>{
   console.log("Login user", req.body);
@@ -9,11 +10,13 @@ exports.login = async(req, res) =>{
   
   try {
     const result = await User.findOne({username: username})
+    console.log("User", result);
     const isMatch = await bcrypt.compare(password, result.password)
     
     // if (result && result.username === username && result.password === password){
     if (result && result.username === username && isMatch){
-      res.status(200).json({status: true, data: "user logged in"});
+        const token = AuthService.generateAccessToken(result);
+      res.status(200).json({status: true, data: token});
     } else {
       res.status(404).json({status: false, data: "user not logged in"});
     }

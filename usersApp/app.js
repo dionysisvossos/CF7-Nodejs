@@ -11,4 +11,4 @@ app.use('/api/auth', auth);
 app.use('/api/users', user);
 app.use('/api/user-product', userProduct);
 
-module.exports = app;
+module.exports = app; 
