@@ -18,6 +18,19 @@ function generateAccessToken(user) {
     
 }
 
+function verifyAccessToken(token) {
+    const secret = process.env.TOKEN_SECRET;
+    try {
+        const payload = jwt.verify(token, secret);
+        console.log("Verify token", payload);
+        return {verified: true, data: payload};
+    } catch (err) {
+        console.log("Error in decoding token", err);
+        return {verified: false, data: err.message};
+    }
+}
+
 module.exports = {
-    generateAccessToken
+    generateAccessToken,
+    verifyAccessToken
 }

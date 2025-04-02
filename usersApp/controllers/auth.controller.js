@@ -9,7 +9,7 @@ exports.login = async(req, res) =>{
   const password = req.body.password;
   
   try {
-    const result = await User.findOne({username: username})
+    const result = await User.findOne({username: username}, {username: 1, password: 1, email: 1, roles: 1});
     console.log("User", result);
     const isMatch = await bcrypt.compare(password, result.password)
     
