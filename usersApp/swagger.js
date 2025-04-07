@@ -14,6 +14,11 @@ exports.options = {
             }
         }
     },
+    "security": [
+        {
+            "BearerAuth": []
+        }
+    ],
     "openapi": "3.1.0",
     "info": {
         "title": "Users and Products CRUD API",
@@ -108,7 +113,7 @@ exports.options = {
                 "tags": ["Auth"],
                 "description": "Login user",
                 "requestBody": {
-                    "description": "User login credentials with jwt token",
+                    "description": "User login credentials resulting in jwt token",
                     "content": {
                         "application/json": {
                             "schema": {
