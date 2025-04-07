@@ -33,11 +33,11 @@ exports.options = {
     "servers": [
         {
             "url": "http://localhost:3000",
-            "description": "Development server"
+            "description": "Local server"
         },
         {
             "url": "https://api.example.com",
-            "description": "Production server"
+            "description": "Development server"
         }
     ],
     "tags": [
@@ -74,6 +74,80 @@ exports.options = {
                         }
                     }
                 }
+            },
+            "post": {
+                "tags": ["Users"],
+                "description": "Create a new user",
+                "requestBody": {
+                    "description": "JSON object containing user data",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "username": {
+                                        "type": "string",
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                    },
+                                    "name": {
+                                        "type": "string",
+                                    },
+                                    "surname": {
+                                        "type": "string",
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                    },
+                                    "address": {
+                                        "type": "object",
+                                        "properties": {
+                                            "area": { "type": "string" },
+                                            "road": { "type": "string" },
+                                        }
+                                    },
+                                    "phone": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "object",
+                                            "properties": {
+                                                "type": {
+                                                    "type": "string"},
+                                                "number": {
+                                                    "type": "number"},
+                                            }
+                                        }
+                                    }
+                                },
+                                "required": ["username", "password", "name", "surname", "email"],
+                            }
+                        }
+                    },
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/User"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "User created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/User"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input data"
+                    }
+                }
             }
         },
         "/api/users/{username}": {
@@ -101,6 +175,100 @@ exports.options = {
                                 }
                             }
                         }
+                    },
+                    "404": {
+                        "description": "User not found"
+                    }
+                }
+            },
+            "patch": {
+                "tags": ["Users"],
+                "description": "Update a user by username",
+                "parameters": [
+                    {
+                        "name": "username",
+                        "in": "path",
+                        "required": true,
+                        "description": "Username of the user to update",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "JSON object containing updated user data",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "username": {
+                                        "type": "string",
+                                    },
+                                    "name": {
+                                        "type": "string",
+                                    },
+                                    "surname": {
+                                        "type": "string",
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                    },
+                                    "address": {
+                                        "type": "object",
+                                        "properties": {
+                                            "area": { "type": "string" },
+                                            "road": { "type": "string" },
+                                        }
+                                    },
+                                    "phone": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "object",
+                                            "properties": {
+                                                "type": {
+                                                    "type": "string"},
+                                                "number": {
+                                                    "type": "number"}
+                                            }
+                                        }
+                                    }
+                                },
+                                "required": ["email"],
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "User updated successfully",
+                        "content": {
+                            "application/json": {
+                                "$ref": "#/components/schemas/User"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "User not found"
+                    }
+                }
+            },
+            "delete": {
+                "tags": ["Users"],
+                "description": "Delete a user by username",
+                "parameters": [
+                    {
+                        "name": "username",
+                        "in": "path",
+                        "required": true,
+                        "description": "Username of the user to delete",
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "User deleted successfully"
                     },
                     "404": {
                         "description": "User not found"
@@ -152,5 +320,38 @@ exports.options = {
                 }
             }
         },
+        "/api/user-product/{username}": {
+            "get": {
+                "tags": ["Users and Products"],
+                "description": "Returns a list of products for a user",
+                "parameters": [
+                    {
+                        "name": "username",
+                        "in": "path",
+                        "required": true,
+                        "description": "Username of the user to find products for",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of products for the user",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": 'array',
+                                    "items": { "$ref": '#/components/schemas/User' }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": 'User not found'
+                    }
+                }
+            }
+        }
     }
 }
