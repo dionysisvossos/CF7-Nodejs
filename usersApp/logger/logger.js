@@ -34,6 +34,7 @@
 
 // Third example: Logger with file transport and rotation
 require('winston-daily-rotate-file');
+require('winston-MongoDB')
 const {createLogger, format, transports} = require('winston');
 const {combine, timestamp, label, printf} = format;
 const Category = 'Products app logs';
@@ -41,7 +42,8 @@ const Category = 'Products app logs';
 const fileRotateTransport = new transports.DailyRotateFile({
     filename: 'logs/rotate-%DATE%.log',
     datePattern: 'DDD-MM-YYYY',
-    maxFiles: '14d',
+    maxFiles: '7d',
+    level: 'error',
 });
 
 const logger = createLogger({
@@ -58,6 +60,27 @@ const logger = createLogger({
                 filename: 'logs/example.log'
             }
         ),
+        new transports.File({
+            filename: 'logs/warn.log',
+            level: 'warn'
+        }),
+        new transports.File({
+            filename: 'logs/error.log',
+            level: 'error'
+        }),
+        new transports.File({
+            filename: 'logs/info.log',
+            level: 'info'
+        }),
+        new transports.MongoDB({
+            level: "warn",
+            db: process.env.MONGODB_URI,
+            collection: 'server_logs',
+            format: format.combine(
+                format.timestamp(),
+                format.json()
+            )
+          })
     ]
 })
     
