@@ -34,7 +34,7 @@
 
 // Third example: Logger with file transport and rotation
 require('winston-daily-rotate-file');
-require('winston-MongoDB')
+require('winston-mongodb')
 const {createLogger, format, transports} = require('winston');
 const {combine, timestamp, label, printf} = format;
 const Category = 'Products app logs';
